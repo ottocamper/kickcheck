@@ -34,3 +34,8 @@ build/
 *.min.js
 *.min.css
 
+# Database files
+database/*.db
+database/*.db-journal
+database/*.db-wal
+
