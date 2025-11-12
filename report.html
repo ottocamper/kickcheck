@@ -774,210 +774,157 @@
     </footer>
 
     <script>
-        // Sample report data with detailed scores and campaign history
-        const reportData = {
-            'nexus-hub': {
-                title: 'The Ultimate Smart Home Hub',
-                creator: 'Nexus Technologies',
-                grade: 'A',
-                overallScore: 92,
-                scores: {
-                    businessLegitimacy: 25,
-                    trackRecord: 23,
-                    manufacturing: 20,
-                    financial: 18,
-                    communication: 22
-                },
-                campaignHistory: [
-                    { name: 'Smart Thermostat Pro', status: 'on-time', url: 'https://www.kickstarter.com/projects/nexus/thermostat' },
-                    { name: 'Home Security Camera System', status: 'on-time', url: 'https://www.kickstarter.com/projects/nexus/camera' },
-                    { name: 'IoT Light Switch', status: 'delayed', delay: '8 months', url: 'https://www.kickstarter.com/projects/nexus/lightswitch' }
-                ]
-            },
-            'ecoflow': {
-                title: 'EcoFlow: Sustainable Water Bottle System',
-                creator: 'GreenLife Innovations',
-                grade: 'B+',
-                overallScore: 85,
-                scores: {
-                    businessLegitimacy: 24,
-                    trackRecord: 21,
-                    manufacturing: 18,
-                    financial: 16,
-                    communication: 20
-                },
-                campaignHistory: [
-                    { name: 'EcoBottle Original', status: 'on-time', url: 'https://www.kickstarter.com/projects/greenlife/ecobottle' },
-                    { name: 'Reusable Coffee Cup', status: 'on-time', url: 'https://www.kickstarter.com/projects/greenlife/cup' },
-                    { name: 'Travel Water Filter', status: 'delayed', delay: '6 months', url: 'https://www.kickstarter.com/projects/greenlife/filter' }
-                ]
-            },
-            'fittrack': {
-                title: 'FitTrack AI - Next-Gen Fitness Tracker',
-                creator: 'FitAI Technologies',
-                grade: 'B',
-                overallScore: 78,
-                scores: {
-                    businessLegitimacy: 22,
-                    trackRecord: 19,
-                    manufacturing: 16,
-                    financial: 15,
-                    communication: 18
-                },
-                campaignHistory: [
-                    { name: 'FitBand Basic', status: 'on-time', url: 'https://www.kickstarter.com/projects/fitai/fitband' },
-                    { name: 'Smart Scale Pro', status: 'delayed', delay: '10 months', url: 'https://www.kickstarter.com/projects/fitai/scale' }
-                ]
-            },
-            'audiotech': {
-                title: 'AirPods Pro Alternative - Premium Wireless Earbuds',
-                creator: 'AudioTech Industries',
-                grade: 'A-',
-                overallScore: 88,
-                scores: {
-                    businessLegitimacy: 25,
-                    trackRecord: 22,
-                    manufacturing: 19,
-                    financial: 17,
-                    communication: 21
-                },
-                campaignHistory: [
-                    { name: 'Wireless Headphones V1', status: 'on-time', url: 'https://www.kickstarter.com/projects/audiotech/headphones1' },
-                    { name: 'Bluetooth Speaker', status: 'on-time', url: 'https://www.kickstarter.com/projects/audiotech/speaker' },
-                    { name: 'Studio Monitor Headphones', status: 'delayed', delay: '7 months', url: 'https://www.kickstarter.com/projects/audiotech/monitor' }
-                ]
-            }
-        };
-
-        // Default data for reports not in the list
-        const defaultData = {
-            title: 'Sample KickCheck Report',
-            creator: 'Sample Creator',
-            grade: 'B+',
-            overallScore: 82,
-            scores: {
-                businessLegitimacy: 23,
-                trackRecord: 20,
-                manufacturing: 17,
-                financial: 15,
-                communication: 19
-            },
-            campaignHistory: [
-                { name: 'Previous Campaign 1', status: 'on-time', url: 'https://www.kickstarter.com/projects/sample/campaign1' },
-                { name: 'Previous Campaign 2', status: 'on-time', url: 'https://www.kickstarter.com/projects/sample/campaign2' },
-                { name: 'Previous Campaign 3', status: 'delayed', delay: '8 months', url: 'https://www.kickstarter.com/projects/sample/campaign3' }
-            ]
-        };
-
+        // API endpoint
+        const API_URL = 'http://localhost:5000/api';
+        
         // Get report ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const reportId = urlParams.get('id');
-
-        // Load report data
-        const report = (reportId && reportData[reportId]) ? reportData[reportId] : defaultData;
-
-        // Populate report header
-        document.getElementById('reportTitle').textContent = report.title;
-        document.getElementById('reportCreator').textContent = `by ${report.creator}`;
-        document.getElementById('gradeDisplay').textContent = report.grade;
-        document.getElementById('confidenceScore').textContent = `Confidence Score: ${report.overallScore}/100`;
-        document.getElementById('overallScore').textContent = `${report.overallScore}/100`;
-
-        // Populate campaign history
-        const historyList = document.getElementById('campaignHistoryList');
-        const totalCampaigns = report.campaignHistory.length;
-        const deliveredCampaigns = report.campaignHistory.length;
-        const onTimeCampaigns = report.campaignHistory.filter(c => c.status === 'on-time').length;
-        const delayedCampaigns = report.campaignHistory.filter(c => c.status === 'delayed').length;
-
-        document.getElementById('totalCampaigns').textContent = totalCampaigns;
-        document.getElementById('deliveredCampaigns').textContent = deliveredCampaigns;
-        document.getElementById('onTimeCampaigns').textContent = onTimeCampaigns;
-        document.getElementById('delayedCampaigns').textContent = delayedCampaigns;
-        document.getElementById('trackRecordScore').textContent = `${deliveredCampaigns}/${totalCampaigns}`;
-
-        // Populate manufacturing breakdown
-        const manufacturingBreakdown = document.getElementById('manufacturingBreakdown');
-        const manufacturingScores = report.manufacturingScores || {
-            partners: 22,
-            timeline: 20,
-            financial: 18
-        };
-
-        const manufacturingItems = [
-            { label: 'Manufacturing partners identified and verified', score: manufacturingScores.partners },
-            { label: 'Realistic production timeline established', score: manufacturingScores.timeline },
-            { label: 'Financial projections appear sound', score: manufacturingScores.financial }
-        ];
-
-        manufacturingItems.forEach(item => {
-            const percentage = (item.score / 25) * 100;
-            let badgeClass = 'good';
-            if (percentage < 60) badgeClass = 'poor';
-            else if (percentage < 80) badgeClass = 'warning';
-
-            const scoreItem = document.createElement('div');
-            scoreItem.className = 'score-item';
-            scoreItem.innerHTML = `
-                <span class="score-item-label">${item.label}</span>
-                <div class="score-item-value">
-                    <span class="score-badge ${badgeClass}">${item.score}/25</span>
-                </div>
-            `;
-            manufacturingBreakdown.appendChild(scoreItem);
-        });
-
-        // Populate score breakdown
-        const scoreBreakdown = document.getElementById('scoreBreakdown');
-        const scoreLabels = {
-            businessLegitimacy: 'Business Legitimacy',
-            trackRecord: 'Track Record',
-            manufacturing: 'Manufacturing Readiness',
-            financial: 'Financial Planning',
-            communication: 'Communication & Transparency'
-        };
-
-        Object.entries(scoreLabels).forEach(([key, label]) => {
-            const score = report.scores[key];
-            const maxScore = 25;
-            const percentage = (score / maxScore) * 100;
-            let badgeClass = 'good';
-            if (percentage < 60) badgeClass = 'poor';
-            else if (percentage < 80) badgeClass = 'warning';
-
-            const item = document.createElement('div');
-            item.className = 'score-item';
-            item.innerHTML = `
-                <span class="score-item-label">${label}</span>
-                <div class="score-item-value">
-                    <span class="score-badge ${badgeClass}">${score}/${maxScore}</span>
-                </div>
-            `;
-            scoreBreakdown.appendChild(item);
-        });
-
-        // Render campaign history items
-        report.campaignHistory.forEach(campaign => {
-            const item = document.createElement('div');
-            item.className = `campaign-item ${campaign.status}`;
+        
+        // Load report data from API
+        async function loadReport() {
+            if (!reportId) {
+                showError('No report ID provided');
+                return;
+            }
             
-            const delayBanner = campaign.status === 'delayed' 
-                ? `<span class="warning-banner">⚠️ Delayed ~${campaign.delay}</span>` 
-                : '';
-            
-            item.innerHTML = `
-                <div class="campaign-info">
-                    <div class="campaign-name">${campaign.name}</div>
-                    <div class="campaign-status">
-                        ${campaign.status === 'on-time' ? '✅ Delivered on time' : `⚠️ Delivered ${campaign.delay} late`}
-                        ${delayBanner}
+            try {
+                const response = await fetch(`${API_URL}/reports/${reportId}`);
+                if (!response.ok) {
+                    throw new Error('Report not found');
+                }
+                
+                const data = await response.json();
+                populateReport(data);
+            } catch (error) {
+                console.error('Error loading report:', error);
+                showError('Failed to load report. Please try again later.');
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('reportTitle').textContent = 'Error';
+            document.getElementById('reportCreator').textContent = message;
+        }
+        
+        function populateReport(data) {
+            const report = {
+                title: data.title,
+                creator: data.creator,
+                grade: data.grade,
+                overallScore: data.overallScore,
+                scores: data.scores || {},
+                manufacturingScores: data.manufacturingScores || {},
+                campaignHistory: data.campaignHistory || []
+            };
+
+            // Populate report header
+            document.getElementById('reportTitle').textContent = report.title;
+            document.getElementById('reportCreator').textContent = `by ${report.creator}`;
+            document.getElementById('gradeDisplay').textContent = report.grade;
+            document.getElementById('confidenceScore').textContent = `Confidence Score: ${report.overallScore}/100`;
+            document.getElementById('overallScore').textContent = `${report.overallScore}/100`;
+
+            // Populate campaign history
+            const historyList = document.getElementById('campaignHistoryList');
+            const totalCampaigns = report.campaignHistory.length;
+            const deliveredCampaigns = report.campaignHistory.length;
+            const onTimeCampaigns = report.campaignHistory.filter(c => c.status === 'on-time').length;
+            const delayedCampaigns = report.campaignHistory.filter(c => c.status === 'delayed').length;
+
+            document.getElementById('totalCampaigns').textContent = totalCampaigns;
+            document.getElementById('deliveredCampaigns').textContent = deliveredCampaigns;
+            document.getElementById('onTimeCampaigns').textContent = onTimeCampaigns;
+            document.getElementById('delayedCampaigns').textContent = delayedCampaigns;
+            document.getElementById('trackRecordScore').textContent = `${deliveredCampaigns}/${totalCampaigns}`;
+
+            // Populate manufacturing breakdown
+            const manufacturingBreakdown = document.getElementById('manufacturingBreakdown');
+            const manufacturingScores = report.manufacturingScores || {
+                partners: 22,
+                timeline: 20,
+                financial: 18
+            };
+
+            const manufacturingItems = [
+                { label: 'Manufacturing partners identified and verified', score: manufacturingScores.partners },
+                { label: 'Realistic production timeline established', score: manufacturingScores.timeline },
+                { label: 'Financial projections appear sound', score: manufacturingScores.financial }
+            ];
+
+            manufacturingItems.forEach(item => {
+                const percentage = (item.score / 25) * 100;
+                let badgeClass = 'good';
+                if (percentage < 60) badgeClass = 'poor';
+                else if (percentage < 80) badgeClass = 'warning';
+
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                scoreItem.innerHTML = `
+                    <span class="score-item-label">${item.label}</span>
+                    <div class="score-item-value">
+                        <span class="score-badge ${badgeClass}">${item.score}/25</span>
                     </div>
-                </div>
-                <a href="${campaign.url}" target="_blank" class="campaign-link">View Campaign →</a>
-            `;
-            
-            historyList.appendChild(item);
-        });
+                `;
+                manufacturingBreakdown.appendChild(scoreItem);
+            });
+
+            // Populate score breakdown
+            const scoreBreakdown = document.getElementById('scoreBreakdown');
+            const scoreLabels = [
+                'Business Legitimacy',
+                'Track Record',
+                'Manufacturing Readiness',
+                'Financial Planning',
+                'Communication & Transparency'
+            ];
+
+            scoreLabels.forEach(label => {
+                const score = report.scores[label] || 0;
+                const maxScore = 25;
+                const percentage = (score / maxScore) * 100;
+                let badgeClass = 'good';
+                if (percentage < 60) badgeClass = 'poor';
+                else if (percentage < 80) badgeClass = 'warning';
+
+                const item = document.createElement('div');
+                item.className = 'score-item';
+                item.innerHTML = `
+                    <span class="score-item-label">${label}</span>
+                    <div class="score-item-value">
+                        <span class="score-badge ${badgeClass}">${score}/${maxScore}</span>
+                    </div>
+                `;
+                scoreBreakdown.appendChild(item);
+            });
+
+            // Render campaign history items
+            report.campaignHistory.forEach(campaign => {
+                const item = document.createElement('div');
+                item.className = `campaign-item ${campaign.status}`;
+                
+                const delayMonths = campaign.delay_months;
+                const delayBanner = campaign.status === 'delayed' && delayMonths
+                    ? `<span class="warning-banner">⚠️ Delayed ~${delayMonths} months</span>` 
+                    : '';
+                
+                item.innerHTML = `
+                    <div class="campaign-info">
+                        <div class="campaign-name">${campaign.campaign_name}</div>
+                        <div class="campaign-status">
+                            ${campaign.status === 'on-time' ? '✅ Delivered on time' : `⚠️ Delivered ${delayMonths} months late`}
+                            ${delayBanner}
+                        </div>
+                    </div>
+                    <a href="${campaign.kickstarter_url}" target="_blank" class="campaign-link">View Campaign →</a>
+                `;
+                
+                historyList.appendChild(item);
+            });
+        }
+        
+        // Initialize on page load
+        loadReport();
 
         // Modal functionality
         const methodologyLink = document.getElementById('methodologyLink');

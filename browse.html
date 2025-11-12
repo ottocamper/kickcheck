@@ -472,180 +472,37 @@
     </footer>
 
     <script>
-        // Campaign data - realistic placeholder campaigns
-        const campaigns = [
-            {
-                name: "The Ultimate Smart Home Hub",
-                creator: "Nexus Technologies",
-                grade: "A",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/nexus/smart-home-hub",
-                reportUrl: "report.html?id=nexus-hub"
-            },
-            {
-                name: "EcoFlow: Sustainable Water Bottle System",
-                creator: "GreenLife Innovations",
-                grade: "B+",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/greenlife/ecoflow-bottle",
-                reportUrl: "report.html?id=ecoflow"
-            },
-            {
-                name: "SolarCharge Pro - Portable Power Station",
-                creator: "SolarTech Solutions",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/solartech/solarcharge",
-                reportUrl: null
-            },
-            {
-                name: "FitTrack AI - Next-Gen Fitness Tracker",
-                creator: "FitAI Technologies",
-                grade: "B",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/fitai/fittrack",
-                reportUrl: "report.html?id=fittrack"
-            },
-            {
-                name: "EcoPack - Sustainable Travel Backpack",
-                creator: "EcoWear Collective",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/ecowear/ecopack",
-                reportUrl: null
-            },
-            {
-                name: "AirPods Pro Alternative - Premium Wireless Earbuds",
-                creator: "AudioTech Industries",
-                grade: "A-",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/audiotech/wireless-earbuds",
-                reportUrl: "report.html?id=audiotech"
-            },
-            {
-                name: "PlantSense - Smart Indoor Garden Monitor",
-                creator: "GardenTech Labs",
-                grade: "C+",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/gardentech/plantsense",
-                reportUrl: "report.html?id=plantsense"
-            },
-            {
-                name: "ModuCase - Modular Phone Protection System",
-                creator: "CaseDesign Studio",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/casedesign/moducase",
-                reportUrl: null
-            },
-            {
-                name: "Quantum Keyboard - Mechanical Gaming Keyboard",
-                creator: "KeyTech Gaming",
-                grade: "A-",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/keytech/quantum-keyboard",
-                reportUrl: "report.html?id=quantum"
-            },
-            {
-                name: "ZenSleep - Smart Sleep Tracker Mat",
-                creator: "WellnessTech",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/wellness/zensleep",
-                reportUrl: null
-            },
-            {
-                name: "EcoDrive - Electric Bike Conversion Kit",
-                creator: "GreenMobility Co.",
-                grade: "B+",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/greenmobility/ecodrive",
-                reportUrl: "report.html?id=ecodrive"
-            },
-            {
-                name: "PocketLab - Portable Science Lab",
-                creator: "EduTech Solutions",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/edutech/pocketlab",
-                reportUrl: null
-            },
-            {
-                name: "LumiWatch - Smart Watch with E-Ink Display",
-                creator: "WatchTech Innovations",
-                grade: "B",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/watchtech/lumiwatch",
-                reportUrl: "report.html?id=lumiwatch"
-            },
-            {
-                name: "AirPurify Pro - HEPA Air Purifier",
-                creator: "CleanAir Systems",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/cleanair/airpurify",
-                reportUrl: null
-            },
-            {
-                name: "CodePad - Programmable Touchpad",
-                creator: "DevTools Inc.",
-                grade: "A",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/devtools/codepad",
-                reportUrl: "report.html?id=codepad"
-            },
-            {
-                name: "EcoCook - Solar-Powered Cooking System",
-                creator: "SolarKitchen",
-                grade: "C",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/solarkitchen/ecocook",
-                reportUrl: "report.html?id=ecocook"
-            },
-            {
-                name: "FlexiDesk - Adjustable Standing Desk",
-                creator: "ErgoWorks",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/ergoworks/flexidesk",
-                reportUrl: null
-            },
-            {
-                name: "SoundBarrier - Noise-Canceling Headphones",
-                creator: "AudioShield",
-                grade: "B+",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/audioshield/soundbarrier",
-                reportUrl: "report.html?id=soundbarrier"
-            },
-            {
-                name: "AquaGrow - Automated Hydroponic System",
-                creator: "UrbanFarm Tech",
-                grade: null,
-                verified: false,
-                kickstarterUrl: "https://www.kickstarter.com/projects/urbanfarm/aquagrow",
-                reportUrl: null
-            },
-            {
-                name: "PowerBank Max - 20000mAh Portable Charger",
-                creator: "ChargeTech",
-                grade: "A-",
-                verified: true,
-                kickstarterUrl: "https://www.kickstarter.com/projects/chargetech/powerbank-max",
-                reportUrl: "report.html?id=powerbank"
+        // API endpoint
+        const API_URL = 'http://localhost:5000/api';
+        
+        // Campaign data - fetched from API
+        let campaigns = [];
+        
+        // Fetch campaigns from API
+        async function loadCampaigns() {
+            try {
+                const response = await fetch(`${API_URL}/campaigns`);
+                campaigns = await response.json();
+                
+                // Sort campaigns: verified first, then by grade
+                campaigns.sort((a, b) => {
+                    if (a.verified && !b.verified) return -1;
+                    if (!a.verified && b.verified) return 1;
+                    if (a.verified && b.verified) {
+                        const gradeOrder = { 'A+': 0, 'A': 1, 'A-': 2, 'B+': 3, 'B': 4, 'B-': 5, 'C+': 6, 'C': 7, 'C-': 8, 'D': 9, 'F': 10 };
+                        return (gradeOrder[a.grade] || 99) - (gradeOrder[b.grade] || 99);
+                    }
+                    return 0;
+                });
+                
+                renderCampaigns(campaigns);
+            } catch (error) {
+                console.error('Error loading campaigns:', error);
+                // Fallback to empty array
+                campaigns = [];
+                renderCampaigns([]);
             }
-        ];
-
-        // Sort campaigns: verified first, then by grade
-        campaigns.sort((a, b) => {
-            if (a.verified && !b.verified) return -1;
-            if (!a.verified && b.verified) return 1;
-            if (a.verified && b.verified) {
-                const gradeOrder = { 'A+': 0, 'A': 1, 'A-': 2, 'B+': 3, 'B': 4, 'B-': 5, 'C+': 6, 'C': 7, 'C-': 8, 'D': 9, 'F': 10 };
-                return (gradeOrder[a.grade] || 99) - (gradeOrder[b.grade] || 99);
-            }
-            return 0;
-        });
+        }
 
         function renderCampaigns(filteredCampaigns) {
             const list = document.getElementById('campaignsList');
@@ -686,26 +543,53 @@
             }).join('');
         }
 
-        function filterCampaigns(searchTerm) {
+        async function filterCampaigns(searchTerm) {
             if (!searchTerm.trim()) {
                 return campaigns;
             }
             
-            const term = searchTerm.toLowerCase();
-            return campaigns.filter(campaign => 
-                campaign.name.toLowerCase().includes(term) ||
-                campaign.creator.toLowerCase().includes(term)
-            );
+            try {
+                const response = await fetch(`${API_URL}/campaigns?q=${encodeURIComponent(searchTerm)}`);
+                const filtered = await response.json();
+                
+                // Sort filtered results
+                filtered.sort((a, b) => {
+                    if (a.verified && !b.verified) return -1;
+                    if (!a.verified && b.verified) return 1;
+                    if (a.verified && b.verified) {
+                        const gradeOrder = { 'A+': 0, 'A': 1, 'A-': 2, 'B+': 3, 'B': 4, 'B-': 5, 'C+': 6, 'C': 7, 'C-': 8, 'D': 9, 'F': 10 };
+                        return (gradeOrder[a.grade] || 99) - (gradeOrder[b.grade] || 99);
+                    }
+                    return 0;
+                });
+                
+                return filtered;
+            } catch (error) {
+                console.error('Error searching campaigns:', error);
+                // Fallback to client-side filtering
+                const term = searchTerm.toLowerCase();
+                return campaigns.filter(campaign => 
+                    campaign.name.toLowerCase().includes(term) ||
+                    campaign.creator.toLowerCase().includes(term)
+                );
+            }
         }
 
-        // Initial render
-        renderCampaigns(campaigns);
+        // Initial load
+        loadCampaigns();
 
         // Search functionality
         const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', (e) => {
-            const filtered = filterCampaigns(e.target.value);
-            renderCampaigns(filtered);
+        let searchTimeout;
+        searchInput.addEventListener('input', async (e) => {
+            clearTimeout(searchTimeout);
+            const term = e.target.value;
+            
+            // Debounce search
+            searchTimeout = setTimeout(async () => {
+                const filtered = await filterCampaigns(term);
+                renderCampaigns(filtered);
+            }, 300);
         });
     </script>
 </body>
