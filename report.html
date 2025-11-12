@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KickCheck Report - KickCheck</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1;stop-opacity:1' /%3E%3Cstop offset='50%25' style='stop-color:%238b5cf6;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23a855f7;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-light);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: opacity 0.2s;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Report Content */
+        .report-content {
+            padding: 40px 20px;
+        }
+
+        .report-header {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .report-title {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .report-creator {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .grade-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 32px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .grade-large {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .grade-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grade-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .confidence-score {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .report-section {
+            background: var(--bg-white);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .section-content ul {
+            margin-left: 20px;
+            margin-top: 12px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--success-light);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        /* Score Breakdown */
+        .score-breakdown {
+            display: grid;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .score-item-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .score-item-value {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .score-badge {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .score-badge.good {
+            background: var(--success);
+        }
+
+        .score-badge.warning {
+            background: var(--warning);
+        }
+
+        .score-badge.poor {
+            background: #ef4444;
+        }
+
+        /* Campaign History */
+        .campaign-history {
+            margin-top: 20px;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .campaign-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .campaign-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s;
+        }
+
+        .campaign-item:hover {
+            background: var(--bg-white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .campaign-item.delayed {
+            border-left: 4px solid var(--warning);
+            background: #fef3c7;
+        }
+
+        .campaign-item.on-time {
+            border-left: 4px solid var(--success);
+        }
+
+        .campaign-info {
+            flex: 1;
+        }
+
+        .campaign-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .campaign-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .campaign-link {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .campaign-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .warning-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        /* Methodology Modal */
+        .methodology-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 24px;
+            padding: 12px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .methodology-link:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .modal-close {
+            background: var(--bg-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .modal-close:hover {
+            background: var(--border-light);
+        }
+
+        .modal-body {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .modal-body h3 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .modal-body ul {
+            margin-left: 20px;
+            margin-top: 12px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 60px 20px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
+        }
+
+        .footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .footer-logo:hover {
+            opacity: 0.8;
+        }
+
+        .footer-logo-icon {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .footer-logo-text {
+            font-size: 1.375rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            opacity: 0.6;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .report-header {
+                padding: 24px;
+            }
+
+            .grade-display {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .report-section {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                    </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" rx="22" fill="url(#logoGrad)"/>
+                    <path d="M28 50 L42 64 L72 34" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span class="logo-text">KickCheck</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="browse.html" class="nav-link">Browse Campaigns</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Report Content -->
+    <main class="report-content">
+        <div class="container">
+            <a href="browse.html" class="back-link">← Back to Browse Campaigns</a>
+            
+            <div class="report-header">
+                <h1 class="report-title" id="reportTitle">Loading Report...</h1>
+                <p class="report-creator" id="reportCreator"></p>
+                <div class="grade-display">
+                    <div class="grade-large" id="gradeDisplay">-</div>
+                    <div class="grade-info">
+                        <div class="grade-label">KickCheck Grade</div>
+                        <div class="confidence-score" id="confidenceScore">Loading...</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="status-badge">✅ Verified by KickCheck</span>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="section-title">Executive Summary</h2>
+                <div class="section-content" id="executiveSummary">
+                    <p>This campaign has been independently verified by KickCheck. Our comprehensive review examined the company's background, track record, manufacturing capabilities, and financial readiness.</p>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="section-title">Business Identity</h2>
+                <div class="section-content" id="businessIdentity">
+                    <p><strong>Status:</strong> Confirmed</p>
+                    <p>The company behind this campaign has been verified as a legitimate business entity. Corporate registration and business information have been validated.</p>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="section-title">Track Record</h2>
+                <div class="section-content" id="trackRecord">
+                    <div class="score-item">
+                        <span class="score-item-label">Previous successful campaign delivery record</span>
+                        <div class="score-item-value">
+                            <span class="score-badge good" id="trackRecordScore">3/3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="campaign-history">
+                        <div class="history-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalCampaigns">3</div>
+                                <div class="stat-label">Campaigns Created</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="deliveredCampaigns">3</div>
+                                <div class="stat-label">Delivered Successfully</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="onTimeCampaigns">2</div>
+                                <div class="stat-label">On Time</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="delayedCampaigns">1</div>
+                                <div class="stat-label">Delayed</div>
+                            </div>
+                        </div>
+                        
+                        <div class="campaign-list" id="campaignHistoryList">
+                            <!-- Campaign items will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="section-title">Manufacturing & Financial Readiness</h2>
+                <div class="section-content" id="manufacturing">
+                    <div class="score-breakdown" id="manufacturingBreakdown">
+                        <!-- Manufacturing scores will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="section-title">Confidence Score Breakdown</h2>
+                <div class="section-content">
+                    <p>The overall score of <strong id="overallScore">88/100</strong> reflects our assessment across multiple factors:</p>
+                    <div class="score-breakdown" id="scoreBreakdown">
+                        <!-- Scores will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="section-title">Report Date</h2>
+                <div class="section-content">
+                    <p>This report was generated on <span id="reportDate"></span> and is valid for the duration of the campaign.</p>
+                    <a href="#" class="methodology-link" id="methodologyLink">
+                        📋 KickCheck: Methodology
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Methodology Modal -->
+    <div class="modal" id="methodologyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">KickCheck Methodology</h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>KickCheck conducts comprehensive, independent verification of Kickstarter campaigns to provide backers with transparent, objective assessments. Our detailed inspection process evaluates multiple critical factors:</p>
+                
+                <h3>1. Business Identity Verification</h3>
+                <p>We verify the legal existence and legitimacy of the company behind each campaign:</p>
+                <ul>
+                    <li>Corporate registration and business entity validation</li>
+                    <li>Business address and contact information verification</li>
+                    <li>Tax identification and legal status confirmation</li>
+                    <li>Ownership structure and key personnel identification</li>
+                </ul>
+
+                <h3>2. Track Record Analysis</h3>
+                <p>We review the creator's history of campaign delivery and business operations:</p>
+                <ul>
+                    <li>Previous Kickstarter campaign performance analysis</li>
+                    <li>Delivery timeline accuracy and fulfillment rates</li>
+                    <li>Backer feedback and complaint resolution history</li>
+                    <li>Business continuity and operational stability</li>
+                    <li>Product quality and customer satisfaction metrics</li>
+                </ul>
+
+                <h3>3. Manufacturing & Production Assessment</h3>
+                <p>We evaluate the feasibility and readiness of production plans:</p>
+                <ul>
+                    <li>Manufacturing partner verification and capability assessment</li>
+                    <li>Production timeline realism and risk analysis</li>
+                    <li>Supply chain stability and material sourcing</li>
+                    <li>Quality control processes and testing protocols</li>
+                    <li>Scalability and capacity planning</li>
+                </ul>
+
+                <h3>4. Financial Readiness Review</h3>
+                <p>We assess the financial planning and funding adequacy:</p>
+                <ul>
+                    <li>Funding goal accuracy and cost breakdown analysis</li>
+                    <li>Financial projections and budget planning</li>
+                    <li>Cash flow management and contingency planning</li>
+                    <li>Payment processing and fulfillment cost estimates</li>
+                    <li>Financial stability and resource availability</li>
+                </ul>
+
+                <h3>5. Communication & Transparency Evaluation</h3>
+                <p>We review how well the creator communicates with backers:</p>
+                <ul>
+                    <li>Update frequency and quality of campaign communications</li>
+                    <li>Transparency about risks and challenges</li>
+                    <li>Responsiveness to backer questions and concerns</li>
+                    <li>Honesty about delays and production issues</li>
+                    <li>Post-campaign support and warranty policies</li>
+                </ul>
+
+                <h3>Scoring System</h3>
+                <p>Each category is scored on a 25-point scale, with the total maximum score being 100 points. The final grade is assigned as follows:</p>
+                <ul>
+                    <li><strong>A (90-100):</strong> Excellent - Very high confidence in delivery</li>
+                    <li><strong>B (80-89):</strong> Good - High confidence with minor concerns</li>
+                    <li><strong>C (70-79):</strong> Fair - Moderate confidence, some risks present</li>
+                    <li><strong>D (60-69):</strong> Poor - Low confidence, significant concerns</li>
+                    <li><strong>F (Below 60):</strong> Very Poor - Very low confidence, major red flags</li>
+                </ul>
+
+                <h3>Independence & Objectivity</h3>
+                <p>KickCheck operates independently and does not accept payment from creators to influence grades. Our verification process is objective, data-driven, and based solely on verifiable facts and analysis. We maintain strict confidentiality of proprietary business information while providing transparent assessments to backers.</p>
+
+                <h3>Report Validity</h3>
+                <p>Reports are valid for the duration of the campaign. If significant changes occur (such as major delays, funding issues, or business changes), the report may be updated or re-evaluated. Backers are encouraged to check for updated reports if campaigns extend significantly beyond their original timeline.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <a href="index.html" class="footer-logo">
+                <svg class="footer-logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" rx="22" fill="url(#footerLogoGrad)"/>
+                    <path d="M28 50 L42 64 L72 34" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span class="footer-logo-text">KickCheck</span>
+            </a>
+            <p class="footer-copyright">© 2024 KickCheck. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample report data with detailed scores and campaign history
+        const reportData = {
+            'nexus-hub': {
+                title: 'The Ultimate Smart Home Hub',
+                creator: 'Nexus Technologies',
+                grade: 'A',
+                overallScore: 92,
+                scores: {
+                    businessLegitimacy: 25,
+                    trackRecord: 23,
+                    manufacturing: 20,
+                    financial: 18,
+                    communication: 22
+                },
+                campaignHistory: [
+                    { name: 'Smart Thermostat Pro', status: 'on-time', url: 'https://www.kickstarter.com/projects/nexus/thermostat' },
+                    { name: 'Home Security Camera System', status: 'on-time', url: 'https://www.kickstarter.com/projects/nexus/camera' },
+                    { name: 'IoT Light Switch', status: 'delayed', delay: '8 months', url: 'https://www.kickstarter.com/projects/nexus/lightswitch' }
+                ]
+            },
+            'ecoflow': {
+                title: 'EcoFlow: Sustainable Water Bottle System',
+                creator: 'GreenLife Innovations',
+                grade: 'B+',
+                overallScore: 85,
+                scores: {
+                    businessLegitimacy: 24,
+                    trackRecord: 21,
+                    manufacturing: 18,
+                    financial: 16,
+                    communication: 20
+                },
+                campaignHistory: [
+                    { name: 'EcoBottle Original', status: 'on-time', url: 'https://www.kickstarter.com/projects/greenlife/ecobottle' },
+                    { name: 'Reusable Coffee Cup', status: 'on-time', url: 'https://www.kickstarter.com/projects/greenlife/cup' },
+                    { name: 'Travel Water Filter', status: 'delayed', delay: '6 months', url: 'https://www.kickstarter.com/projects/greenlife/filter' }
+                ]
+            },
+            'fittrack': {
+                title: 'FitTrack AI - Next-Gen Fitness Tracker',
+                creator: 'FitAI Technologies',
+                grade: 'B',
+                overallScore: 78,
+                scores: {
+                    businessLegitimacy: 22,
+                    trackRecord: 19,
+                    manufacturing: 16,
+                    financial: 15,
+                    communication: 18
+                },
+                campaignHistory: [
+                    { name: 'FitBand Basic', status: 'on-time', url: 'https://www.kickstarter.com/projects/fitai/fitband' },
+                    { name: 'Smart Scale Pro', status: 'delayed', delay: '10 months', url: 'https://www.kickstarter.com/projects/fitai/scale' }
+                ]
+            },
+            'audiotech': {
+                title: 'AirPods Pro Alternative - Premium Wireless Earbuds',
+                creator: 'AudioTech Industries',
+                grade: 'A-',
+                overallScore: 88,
+                scores: {
+                    businessLegitimacy: 25,
+                    trackRecord: 22,
+                    manufacturing: 19,
+                    financial: 17,
+                    communication: 21
+                },
+                campaignHistory: [
+                    { name: 'Wireless Headphones V1', status: 'on-time', url: 'https://www.kickstarter.com/projects/audiotech/headphones1' },
+                    { name: 'Bluetooth Speaker', status: 'on-time', url: 'https://www.kickstarter.com/projects/audiotech/speaker' },
+                    { name: 'Studio Monitor Headphones', status: 'delayed', delay: '7 months', url: 'https://www.kickstarter.com/projects/audiotech/monitor' }
+                ]
+            }
+        };
+
+        // Default data for reports not in the list
+        const defaultData = {
+            title: 'Sample KickCheck Report',
+            creator: 'Sample Creator',
+            grade: 'B+',
+            overallScore: 82,
+            scores: {
+                businessLegitimacy: 23,
+                trackRecord: 20,
+                manufacturing: 17,
+                financial: 15,
+                communication: 19
+            },
+            campaignHistory: [
+                { name: 'Previous Campaign 1', status: 'on-time', url: 'https://www.kickstarter.com/projects/sample/campaign1' },
+                { name: 'Previous Campaign 2', status: 'on-time', url: 'https://www.kickstarter.com/projects/sample/campaign2' },
+                { name: 'Previous Campaign 3', status: 'delayed', delay: '8 months', url: 'https://www.kickstarter.com/projects/sample/campaign3' }
+            ]
+        };
+
+        // Get report ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const reportId = urlParams.get('id');
+
+        // Load report data
+        const report = (reportId && reportData[reportId]) ? reportData[reportId] : defaultData;
+
+        // Populate report header
+        document.getElementById('reportTitle').textContent = report.title;
+        document.getElementById('reportCreator').textContent = `by ${report.creator}`;
+        document.getElementById('gradeDisplay').textContent = report.grade;
+        document.getElementById('confidenceScore').textContent = `Confidence Score: ${report.overallScore}/100`;
+        document.getElementById('overallScore').textContent = `${report.overallScore}/100`;
+
+        // Populate campaign history
+        const historyList = document.getElementById('campaignHistoryList');
+        const totalCampaigns = report.campaignHistory.length;
+        const deliveredCampaigns = report.campaignHistory.length;
+        const onTimeCampaigns = report.campaignHistory.filter(c => c.status === 'on-time').length;
+        const delayedCampaigns = report.campaignHistory.filter(c => c.status === 'delayed').length;
+
+        document.getElementById('totalCampaigns').textContent = totalCampaigns;
+        document.getElementById('deliveredCampaigns').textContent = deliveredCampaigns;
+        document.getElementById('onTimeCampaigns').textContent = onTimeCampaigns;
+        document.getElementById('delayedCampaigns').textContent = delayedCampaigns;
+        document.getElementById('trackRecordScore').textContent = `${deliveredCampaigns}/${totalCampaigns}`;
+
+        // Populate manufacturing breakdown
+        const manufacturingBreakdown = document.getElementById('manufacturingBreakdown');
+        const manufacturingScores = report.manufacturingScores || {
+            partners: 22,
+            timeline: 20,
+            financial: 18
+        };
+
+        const manufacturingItems = [
+            { label: 'Manufacturing partners identified and verified', score: manufacturingScores.partners },
+            { label: 'Realistic production timeline established', score: manufacturingScores.timeline },
+            { label: 'Financial projections appear sound', score: manufacturingScores.financial }
+        ];
+
+        manufacturingItems.forEach(item => {
+            const percentage = (item.score / 25) * 100;
+            let badgeClass = 'good';
+            if (percentage < 60) badgeClass = 'poor';
+            else if (percentage < 80) badgeClass = 'warning';
+
+            const scoreItem = document.createElement('div');
+            scoreItem.className = 'score-item';
+            scoreItem.innerHTML = `
+                <span class="score-item-label">${item.label}</span>
+                <div class="score-item-value">
+                    <span class="score-badge ${badgeClass}">${item.score}/25</span>
+                </div>
+            `;
+            manufacturingBreakdown.appendChild(scoreItem);
+        });
+
+        // Populate score breakdown
+        const scoreBreakdown = document.getElementById('scoreBreakdown');
+        const scoreLabels = {
+            businessLegitimacy: 'Business Legitimacy',
+            trackRecord: 'Track Record',
+            manufacturing: 'Manufacturing Readiness',
+            financial: 'Financial Planning',
+            communication: 'Communication & Transparency'
+        };
+
+        Object.entries(scoreLabels).forEach(([key, label]) => {
+            const score = report.scores[key];
+            const maxScore = 25;
+            const percentage = (score / maxScore) * 100;
+            let badgeClass = 'good';
+            if (percentage < 60) badgeClass = 'poor';
+            else if (percentage < 80) badgeClass = 'warning';
+
+            const item = document.createElement('div');
+            item.className = 'score-item';
+            item.innerHTML = `
+                <span class="score-item-label">${label}</span>
+                <div class="score-item-value">
+                    <span class="score-badge ${badgeClass}">${score}/${maxScore}</span>
+                </div>
+            `;
+            scoreBreakdown.appendChild(item);
+        });
+
+        // Render campaign history items
+        report.campaignHistory.forEach(campaign => {
+            const item = document.createElement('div');
+            item.className = `campaign-item ${campaign.status}`;
+            
+            const delayBanner = campaign.status === 'delayed' 
+                ? `<span class="warning-banner">⚠️ Delayed ~${campaign.delay}</span>` 
+                : '';
+            
+            item.innerHTML = `
+                <div class="campaign-info">
+                    <div class="campaign-name">${campaign.name}</div>
+                    <div class="campaign-status">
+                        ${campaign.status === 'on-time' ? '✅ Delivered on time' : `⚠️ Delivered ${campaign.delay} late`}
+                        ${delayBanner}
+                    </div>
+                </div>
+                <a href="${campaign.url}" target="_blank" class="campaign-link">View Campaign →</a>
+            `;
+            
+            historyList.appendChild(item);
+        });
+
+        // Modal functionality
+        const methodologyLink = document.getElementById('methodologyLink');
+        const methodologyModal = document.getElementById('methodologyModal');
+        const modalClose = document.getElementById('modalClose');
+
+        methodologyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            methodologyModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        modalClose.addEventListener('click', () => {
+            methodologyModal.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        methodologyModal.addEventListener('click', (e) => {
+            if (e.target === methodologyModal) {
+                methodologyModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Set report date
+        const today = new Date();
+        document.getElementById('reportDate').textContent = today.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+    </script>
+</body>
+</html>

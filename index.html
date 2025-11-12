@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KickCheck - Verify Your Crowdfunding Campaign</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1;stop-opacity:1' /%3E%3Cstop offset='50%25' style='stop-color:%238b5cf6;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23a855f7;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: opacity 0.2s;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 12px 24px;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 28px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .subheadline {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            margin-bottom: 48px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        .cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #fff;
+            color: var(--primary-dark);
+            padding: 20px 48px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-primary:hover::before {
+            left: 100%;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+        }
+
+        .cta-details {
+            font-size: 0.9375rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        .supporting-line {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-top: 24px;
+            font-weight: 400;
+        }
+
+        /* Comparison Section */
+        .comparison {
+            padding: 100px 20px;
+            background: linear-gradient(to bottom, var(--bg-white) 0%, var(--bg-light) 100%);
+        }
+
+        .comparison h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 64px;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .comparison-card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comparison-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--border-light);
+            transition: background 0.3s;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .comparison-card.unverified {
+            border-color: var(--border-light);
+        }
+
+        .comparison-card.unverified::before {
+            background: var(--warning);
+        }
+
+        .comparison-card.verified {
+            border-color: var(--success);
+            background: linear-gradient(to bottom, var(--bg-white) 0%, var(--success-light) 100%);
+        }
+
+        .comparison-card.verified::before {
+            background: var(--success);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .card-header.unverified {
+            color: var(--text-secondary);
+        }
+
+        .card-header.verified {
+            color: var(--success);
+        }
+
+        .card-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 24px;
+            font-size: 1.0625rem;
+            line-height: 1.6;
+        }
+
+        .card-item-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .confidence-score {
+            background: var(--success);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 700;
+            margin-top: 8px;
+            font-size: 0.9375rem;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-note {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 24px;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 100px 20px;
+            background: var(--bg-white);
+        }
+
+        .process h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .process-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 64px;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .process-steps {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .process-step {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 48px;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .process-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 8px;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .step-description {
+            font-size: 1.0625rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .process-connector {
+            position: absolute;
+            left: 32px;
+            top: 64px;
+            bottom: -48px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary-dark), rgba(99, 102, 241, 0.2));
+            z-index: 1;
+        }
+
+        .process-step:last-child .process-connector {
+            display: none;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 20px;
+            background: var(--bg-white);
+            position: relative;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 64px;
+            font-weight: 400;
+        }
+
+        .pricing-card {
+            max-width: 640px;
+            margin: 0 auto;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 24px;
+            padding: 56px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(255,255,255,0.1) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .pricing-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-price {
+            font-size: clamp(3rem, 6vw, 4rem);
+            font-weight: 800;
+            margin: 24px 0;
+            letter-spacing: -0.03em;
+        }
+
+        .pricing-title {
+            font-size: 1.75rem;
+            margin-bottom: 32px;
+            font-weight: 600;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin: 36px 0;
+        }
+
+        .pricing-features li {
+            padding: 14px 0;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            line-height: 1.5;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            background-color: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 1.125rem;
+        }
+
+        .pricing-addon {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.25);
+            font-size: 0.9375rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .cta-pricing {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #fff;
+            color: var(--primary-dark);
+            padding: 20px 48px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-top: 36px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+        }
+
+        .cta-pricing:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+        }
+
+        .pricing-subtext {
+            margin-top: 20px;
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        /* Social Proof Section */
+        .social-proof {
+            padding: 100px 20px;
+            background: var(--bg-light);
+            text-align: center;
+        }
+
+        .social-proof h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .statistic {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            color: var(--primary-dark);
+            font-weight: 800;
+            margin: 40px 0;
+            letter-spacing: -0.03em;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .statistic-text {
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0 auto 64px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            background: var(--bg-white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .testimonial:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 1.0625rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        /* Footer Teaser */
+        .footer-teaser {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-teaser::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .footer-teaser .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-teaser h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 24px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-teaser p {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            margin-bottom: 32px;
+            opacity: 0.9;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .footer-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 48px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+
+        .footer-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 60px 20px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .footer-logo:hover {
+            opacity: 0.8;
+        }
+
+        .footer-logo-icon {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .footer-logo-text {
+            font-size: 1.375rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            opacity: 0.6;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 80px 20px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .comparison-card {
+                padding: 32px 24px;
+            }
+
+            .process-step {
+                gap: 20px;
+            }
+
+            .step-number {
+                width: 56px;
+                height: 56px;
+                font-size: 1.5rem;
+            }
+
+            .step-title {
+                font-size: 1.25rem;
+            }
+
+            .process-connector {
+                left: 28px;
+            }
+
+            .pricing-card {
+                padding: 40px 28px;
+            }
+
+            .testimonials {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial {
+                padding: 32px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-primary,
+            .cta-pricing,
+            .footer-cta {
+                padding: 16px 32px;
+                font-size: 1rem;
+            }
+
+            .pricing-card {
+                padding: 32px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .nav-cta {
+                padding: 10px 20px;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" rx="22" fill="url(#logoGrad)"/>
+                    <path d="M28 50 L42 64 L72 34" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span class="logo-text">KickCheck</span>
+            </a>
+            <nav class="nav-links">
+                <a href="browse.html" class="nav-link">Browse Campaigns</a>
+                <a href="#pricing" class="nav-cta">Get Verified</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Backers don't trust promises — they trust proof.</h1>
+            <p class="subheadline">KickCheck independently verifies the company behind each crowdfunding campaign — giving backers confidence that your project can actually deliver.</p>
+            <a href="#pricing" class="cta-primary">➡️ Get Verified — $499</a>
+            <div class="cta-details">5-day turnaround • Independent & objective</div>
+            <p class="supporting-line">Your campaign appears as Unverified until it's checked.</p>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <div class="container">
+            <h2>See the Difference</h2>
+            <div class="comparison-grid">
+                <!-- Unverified Card -->
+                <div class="comparison-card unverified">
+                    <div class="card-header unverified">
+                        <span>⚠️</span>
+                        <span>Status: No Data</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">🕵️</span>
+                        <span>Unknown company background</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">📉</span>
+                        <span>No prior campaign record</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">❓</span>
+                        <span>No info on manufacturing or funds</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">💬</span>
+                        <span>Risk Level: Unknown</span>
+                    </div>
+                </div>
+
+                <!-- Verified Card -->
+                <div class="comparison-card verified">
+                    <div class="card-header verified">
+                        <span>✅</span>
+                        <span>Status: Verified</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">🏢</span>
+                        <span>Business identity confirmed</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">📈</span>
+                        <span>Track record reviewed</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">🔧</span>
+                        <span>Manufacturing & financial readiness checked</span>
+                    </div>
+                    <div class="card-item">
+                        <span class="card-item-icon">💬</span>
+                        <span>Confidence Score: <span class="confidence-score">B+</span> (Example)</span>
+                    </div>
+                    <div class="badge-note">
+                        <strong>🪪</strong> "Verified by KickCheck" badge displayed on campaign page
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process">
+        <div class="container">
+            <h2>What's the Process?</h2>
+            <p class="process-subtitle">Getting your KickCheck verification is simple and straightforward. Here's how it works:</p>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="process-connector"></div>
+                    <div class="step-content">
+                        <div class="step-icon">📝</div>
+                        <h3 class="step-title">Submit Your Campaign</h3>
+                        <p class="step-description">Start by providing your Kickstarter campaign URL and basic company information. We'll need details about your business, team, and project timeline.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="process-connector"></div>
+                    <div class="step-content">
+                        <div class="step-icon">💳</div>
+                        <h3 class="step-title">Complete Payment</h3>
+                        <p class="step-description">Pay the $499 verification fee securely. Once payment is confirmed, your verification process begins immediately.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="process-connector"></div>
+                    <div class="step-content">
+                        <div class="step-icon">🔍</div>
+                        <h3 class="step-title">Independent Review</h3>
+                        <p class="step-description">Our team conducts a thorough, independent review of your company background, track record, manufacturing capabilities, and financial readiness. This typically takes 5 business days.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <div class="process-connector"></div>
+                    <div class="step-content">
+                        <div class="step-icon">📊</div>
+                        <h3 class="step-title">Receive Your Report</h3>
+                        <p class="step-description">Get your comprehensive KickCheck Report with an A–F grade and detailed confidence score. The report is published publicly on our platform.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-icon">✅</div>
+                        <h3 class="step-title">Display Your Badge</h3>
+                        <p class="step-description">Once verified, display your "Verified by KickCheck" badge on your campaign page. Your listing appears in our verified directory, giving backers confidence in your project.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Simple, Transparent Pricing</h2>
+            <p class="pricing-subtitle">One flat rate. No surprises.</p>
+            <div class="pricing-card">
+                <div class="pricing-title">🟩 Flat-rate Verification</div>
+                <div class="pricing-price">$499</div>
+                <ul class="pricing-features">
+                    <li>Public KickCheck Report (A–F grade)</li>
+                    <li>Verified badge for your campaign</li>
+                    <li>Confidence Score visible to all backers</li>
+                    <li>Listing in KickCheck's verified directory</li>
+                </ul>
+                <div class="pricing-addon">
+                    Optional add-on (future): Expedited review +$150 (48-hour turnaround)
+                </div>
+                <a href="#contact" class="cta-pricing">🎯 Get Verified Now</a>
+                <p class="pricing-subtext">Show backers you're real before they pledge.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="social-proof">
+        <div class="container">
+            <h2>Trusted by creators who deliver.</h2>
+            <div class="statistic">80%</div>
+            <p class="statistic-text">of backers say they're more likely to pledge when a campaign is KickCheck-verified.</p>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p class="testimonial-text">"Getting verified gave our campaign instant credibility. Backers trusted us from day one."</p>
+                    <p class="testimonial-author">— Sarah Chen, Tech Innovator</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"The verification process was smooth, and the badge made all the difference in our funding success."</p>
+                    <p class="testimonial-author">— Marcus Rodriguez, Product Designer</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"KickCheck helped us stand out in a crowded marketplace. Worth every penny."</p>
+                    <p class="testimonial-author">— Emily Watson, Entrepreneur</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Teaser -->
+    <section class="footer-teaser">
+        <div class="container">
+            <h2>Not verified yet?</h2>
+            <p>Your campaign will still appear on KickCheck — labeled Unverified with a gray warning icon.</p>
+            <p>Don't let that be the first impression backers see.</p>
+            <a href="#pricing" class="footer-cta">➡️ Get Verified — $499</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <a href="#" class="footer-logo">
+                <svg class="footer-logo-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="100" height="100" rx="22" fill="url(#footerLogoGrad)"/>
+                    <path d="M28 50 L42 64 L72 34" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span class="footer-logo-text">KickCheck</span>
+            </a>
+            <p class="footer-copyright">© 2024 KickCheck. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
