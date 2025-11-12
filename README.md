@@ -20,7 +20,31 @@ KickCheck independently verifies Kickstarter campaigns, giving backers confidenc
 
 ## Getting Started
 
-Simply open `index.html` in a web browser to view the landing page.
+### 1. Initialize Database
+
+First, set up the database:
+```bash
+cd database
+python3 init_db.py
+python3 seed_data.py
+```
+
+### 2. Start the API Server
+
+Install dependencies and start the API:
+```bash
+cd api
+pip3 install -r requirements.txt
+python3 app.py
+```
+
+The API will run on `http://localhost:5000`
+
+### 3. Open the Frontend
+
+Open `index.html` in a web browser to view the landing page.
+
+**Note:** The frontend requires the API server to be running to display campaign data.
 
 ## Development
 
